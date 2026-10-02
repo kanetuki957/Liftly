@@ -2,15 +2,16 @@ import { useEffect, useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import TrainingEntry from './TrainingEntry.jsx';
 import TrainingHistory from './TrainingHistory.jsx';
-import { formatNumber, getPreviousRecord, loadTrainingData, saveTrainingData, totalVolume } from '../trainingData.js';
+import { formatNumber, getPreviousRecord, loadTrainingData, maxWeight, saveTrainingData, totalReps, totalSets, totalVolume } from '../trainingData.js';
 
 function Comparison({ record, previous }) {
   if (!record) return null;
   const volume = totalVolume(record);
   if (!previous) return <section className="comparison-card"><p className="eyebrow">LATEST ENTRY</p><h2>{record.exercise}</h2><p>今回の総負荷量は <strong>{volume.toLocaleString('ja-JP')}kg</strong> です。同じ種目の過去記録を追加すると、ここで変化を確認できます。</p></section>;
-  const previousVolume = totalVolume(previous); const volumeChange = previousVolume ? ((volume - previousVolume) / previousVolume) * 100 : 0; const weightDiff = record.weight - previous.weight; const repsDiff = record.reps - previous.reps;
-  const facts = [weightDiff === 0 ? `重量は ${formatNumber(record.weight)}kg で変わっていません。` : `前回より重量が ${formatNumber(Math.abs(weightDiff))}kg ${weightDiff > 0 ? '増加' : '減少'}しています。`, repsDiff === 0 ? `回数は ${formatNumber(record.reps)}回 で変わっていません。` : `回数が ${formatNumber(Math.abs(repsDiff))}回 ${repsDiff > 0 ? '増加' : '減少'}しています。`, `総負荷量は ${previousVolume.toLocaleString('ja-JP')}kg → ${volume.toLocaleString('ja-JP')}kg（${volumeChange >= 0 ? '+' : ''}${formatNumber(volumeChange)}%）です。`];
-  return <section className="comparison-card"><p className="eyebrow">PREVIOUS RECORD COMPARISON</p><h2>{record.exercise}の前回比較</h2><div className="comparison-values"><span>今回<br /><strong>{formatNumber(record.weight)}kg × {formatNumber(record.reps)}回 × {formatNumber(record.sets)}set</strong></span><span>前回<br /><strong>{formatNumber(previous.weight)}kg × {formatNumber(previous.reps)}回 × {formatNumber(previous.sets)}set</strong></span></div><ul>{facts.map((fact) => <li key={fact}>{fact}</li>)}</ul></section>;
+  const previousVolume = totalVolume(previous); const volumeChange = previousVolume ? ((volume - previousVolume) / previousVolume) * 100 : 0;
+  const metrics = [{ label: '最高重量', current: maxWeight(record), previous: maxWeight(previous), unit: 'kg' }, { label: '総回数', current: totalReps(record), previous: totalReps(previous), unit: '回' }, { label: 'セット数', current: totalSets(record), previous: totalSets(previous), unit: 'set' }, { label: '総負荷量', current: volume, previous: previousVolume, unit: 'kg' }];
+  const facts = metrics.map((metric) => `${metric.label}は ${formatNumber(metric.previous)}${metric.unit} → ${formatNumber(metric.current)}${metric.unit}${metric.label === '総負荷量' ? `（${volumeChange >= 0 ? '+' : ''}${formatNumber(volumeChange)}%）` : ''}です。`);
+  return <section className="comparison-card"><p className="eyebrow">PREVIOUS RECORD COMPARISON</p><h2>{record.exercise}の前回比較</h2><div className="comparison-values"><span>今回<br /><strong>最高 {formatNumber(maxWeight(record))}kg · {totalReps(record)}回 · {totalSets(record)}set</strong></span><span>前回<br /><strong>最高 {formatNumber(maxWeight(previous))}kg · {totalReps(previous)}回 · {totalSets(previous)}set</strong></span></div><ul>{facts.map((fact) => <li key={fact}>{fact}</li>)}</ul></section>;
 }
 
 export default function TrainingDashboard() {

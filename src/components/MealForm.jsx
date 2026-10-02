@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 
-const emptyMeal = { name: '', protein: '0', fat: '0', carbs: '0' };
+const emptyMeal = { name: '', protein: '0', fat: '0', carbs: '0', remember: false };
 const fields = [
   { key: 'protein', label: 'P' },
   { key: 'fat', label: 'F' },
@@ -20,7 +20,7 @@ export default function MealForm({ onAdd, onCancel }) {
       fat: Number(meal.fat),
       carbs: Number(meal.carbs),
       createdAt: new Date().toISOString(),
-    });
+    }, meal.remember);
     setMeal(emptyMeal);
   }
 
@@ -67,6 +67,10 @@ export default function MealForm({ onAdd, onCancel }) {
           </label>
         ))}
       </div>
+      <label className="remember-toggle">
+        <input type="checkbox" checked={meal.remember} onChange={(event) => setMeal({ ...meal, remember: event.target.checked })} />
+        <span>この食事を記憶する</span>
+      </label>
       <button className="button button-green meal-submit" type="submit">
         <Plus size={18} /> 食事を追加
       </button>

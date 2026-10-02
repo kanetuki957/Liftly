@@ -1,4 +1,4 @@
-import { formatGrams } from '../data.js';
+import { calculateCalories, formatGrams } from '../data.js';
 
 const nutrients = [
   { key: 'protein', name: 'タンパク質', shortName: 'P', color: 'protein' },
@@ -7,6 +7,7 @@ const nutrients = [
 ];
 
 export default function PfcSummary({ goals, totals }) {
+  const calories = calculateCalories(totals);
   return (
     <section className="summary-section" aria-labelledby="summary-title">
       <div className="section-heading summary-heading">
@@ -16,6 +17,8 @@ export default function PfcSummary({ goals, totals }) {
         </div>
         <span className="unit-note">単位：g</span>
       </div>
+
+      <p className="calorie-summary">今日の摂取カロリー：<strong>{Math.round(calories).toLocaleString('ja-JP')} kcal</strong></p>
 
       <div className="nutrient-list">
         {nutrients.map(({ key, name, shortName, color }) => {

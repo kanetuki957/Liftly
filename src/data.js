@@ -17,22 +17,22 @@ export function loadData() {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (
-      stored?.version === 1 &&
       stored.goals &&
       stored.days &&
       typeof stored.days === 'object'
     ) {
       return {
-        version: 1,
+        version: 2,
         goals: { ...DEFAULT_GOALS, ...stored.goals },
         days: stored.days,
+        rememberedMeals: Array.isArray(stored.rememberedMeals) ? stored.rememberedMeals : [],
       };
     }
   } catch {
     // Ignore missing or invalid local data and start with the defaults.
   }
 
-  return { version: 1, goals: DEFAULT_GOALS, days: {} };
+  return { version: 2, goals: DEFAULT_GOALS, days: {}, rememberedMeals: [] };
 }
 
 export function saveData(data) {
@@ -52,4 +52,8 @@ export function sumMacros(meals) {
 
 export function formatGrams(value) {
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+export function calculateCalories({ protein, fat, carbs }) {
+  return protein * 4 + fat * 9 + carbs * 4;
 }
