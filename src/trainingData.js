@@ -18,7 +18,14 @@ export function normalizeRecord(record) {
   return { ...record, sideMode: false, assisted: false, memo: record.memo ?? '', entries: [{ weight: Number(record.weight), reps: Number(record.reps), sets: setCount, side: null }] };
 }
 export function entryLoad(entry) { return entry.weight ?? entry.assistanceWeight ?? 0; }
-export function totalVolume(record) { return record.entries.reduce((total, entry) => total + entryLoad(entry) * entry.reps * entry.sets, 0); }
+export function entriesVolume(entries) { return entries.reduce((total, entry) => total + entryLoad(entry) * entry.reps * entry.sets, 0); }
+export function sideVolumes(record) {
+  if (!record.sideMode) return null;
+  const right = entriesVolume(record.entries.filter((entry) => entry.side === 'right' || entry.side === 'both'));
+  const left = entriesVolume(record.entries.filter((entry) => entry.side === 'left' || entry.side === 'both'));
+  return { right, left, total: right + left };
+}
+export function totalVolume(record) { const sides = sideVolumes(record); return sides ? sides.total : entriesVolume(record.entries); }
 export function maxWeight(record) { return Math.max(0, ...record.entries.map((entry) => entry.weight ?? 0)); }
 export function totalReps(record) { return record.entries.reduce((total, entry) => total + entry.reps * entry.sets, 0); }
 export function totalSets(record) { return record.entries.reduce((total, entry) => total + entry.sets, 0); }

@@ -271,6 +271,10 @@ h2 { margin: 0; font-size: 19px; font-weight: 700; }
 .training-date-field { margin-top: 13px; }
 .volume-preview { margin: 15px 0 -2px; padding: 11px 12px; border-radius: 7px; color: #526057; background: #f2f6ee; font-size: 12px; }
 .volume-preview strong { margin-left: 8px; color: #2d4c20; font-size: 15px; }
+.side-volume-preview, .side-volume-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 15px 0 0; }
+.side-volume-preview span, .side-volume-summary span { padding: 10px; border-radius: 7px; color: #526057; background: #f2f6ee; font-size: 11px; }
+.side-volume-preview strong, .side-volume-summary strong { display: block; margin-top: 3px; color: #2d4c20; font-size: 15px; }
+.side-volume-preview small, .side-volume-summary small { grid-column: 1 / -1; color: #6c796e; font-size: 11px; text-align: right; }
 .volume-preview small { margin-left: 7px; color: #7c8781; }
 .comparison-card { margin-bottom: 14px; padding: 17px; border: 1px solid #dce8d1; border-radius: 9px; background: #fbfdf8; }
 .comparison-card .eyebrow { color: #648249; }.comparison-card h2 { margin-bottom: 12px; font-size: 17px; }.comparison-card > p:last-child { margin: 0; color: #59675d; font-size: 12px; line-height: 1.7; }
@@ -329,6 +333,9 @@ h2 { margin: 0; font-size: 19px; font-weight: 700; }
 .detail-totals div { padding: 10px; border-radius: 7px; background: #f7faf4; }
 .detail-totals dt { color: #748076; font-size: 10px; }
 .detail-totals dd { margin: 4px 0 0; color: #375626; font-size: 14px; font-weight: 700; }
+.side-comparison { display: grid; gap: 7px; margin: 0 0 12px; }
+.side-comparison p { margin: 0; padding: 10px; border-radius: 7px; color: #526057; background: #f2f6ee; font-size: 12px; }
+.side-comparison strong { color: #375626; }
 .exercise-review { margin-bottom: 16px; }
 .exercise-review-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .exercise-review-list button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; min-height: 68px; padding: 13px 15px; border: 1px solid #e8ece5; border-radius: 8px; color: #29362e; background: rgba(255, 255, 255, .8); text-align: left; cursor: pointer; }
